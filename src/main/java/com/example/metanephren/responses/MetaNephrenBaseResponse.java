@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MetaNephrenBaseResponse<T> {
   T body;
-  private String errorMessage;
-  private String errorCode;
+  @Builder.Default private String errorMessage = "";
+  @Builder.Default private String errorCode = "";
   private Boolean success;
 }

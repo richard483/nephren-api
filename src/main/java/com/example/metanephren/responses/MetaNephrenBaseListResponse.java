@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MetaNephrenBaseListResponse<T> {
   List<T> body = new ArrayList<>();
-  private String errorMessage;
-  private String errorCode;
+  @Builder.Default private String errorMessage = "";
+  @Builder.Default private String errorCode = "";
   private Boolean success;
 }

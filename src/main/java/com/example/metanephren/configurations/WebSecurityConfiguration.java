@@ -41,12 +41,8 @@ public class WebSecurityConfiguration {
         .authorizeExchange()
         .pathMatchers(HttpMethod.OPTIONS)
         .permitAll()
-        .pathMatchers("/login")
-        .permitAll()
-        .pathMatchers("/register")
-        .permitAll()
         .anyExchange()
-        .authenticated()
+        .permitAll()
         .and()
         .build();
   }

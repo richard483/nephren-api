@@ -32,10 +32,10 @@ public class UserController {
   }
 
   @GetMapping("/getAll")
-  @PreAuthorize("hasRole('MEMBER')")
+  @PreAuthorize("hasRole('ADMIN')")
   public Mono<MetaNephrenBaseListResponse<User>> getAll() {
     return userRepository.findAll()
         .collectList()
-        .map(users -> new MetaNephrenBaseListResponse(users, "", "", true));
+        .map(users -> MetaNephrenBaseListResponse.<User>builder().body(users).build());
   }
 }
