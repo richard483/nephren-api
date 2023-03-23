@@ -37,6 +37,7 @@ public class ImageServices {
     DBObject metaData = new BasicDBObject();
     metaData.put("name", name);
     metaData.put("desc", desc);
+    metaData.put("uploader", authenticatedUsername);
     return file.flatMap(filePart -> gridFsTemplate.store(filePart.content(),
             filePart.name(),
             metaData))
@@ -47,7 +48,7 @@ public class ImageServices {
                 name,
                 "desc",
                 desc,
-                "user",
+                "uploader",
                 authenticatedUsername))
             .success(true)
             .build());
@@ -69,7 +70,8 @@ public class ImageServices {
               "name",
               metadata.getString("name"),
               "desc",
-              metadata.getString("desc")))
+              metadata.getString("desc"),
+              "uploader", metadata.getString("uploader")))
           .success(true)
           .build();
     });
