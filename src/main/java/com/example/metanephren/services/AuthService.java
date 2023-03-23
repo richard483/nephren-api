@@ -44,15 +44,20 @@ public class AuthService {
   }
 
   public Mono<MetaNephrenBaseResponse<Object>> register(RegisterRequestVo requestVo) {
-    return userRepository.save(User.builder()
-            .username(requestVo.getUsername())
-            .password(pbkdf2Encoder.encode(requestVo.getPassword()))
-            .roles(List.of(Role.ROLE_MEMBER))
-            .enabled(true)
-            .build())
+    return userRepository.findUserByUsername(requestVo.getUsername())
         .map(user -> MetaNephrenBaseResponse.builder()
-            .body(Map.of("created", user))
-            .success(true)
-            .build());
+            .errorMessage("The username " + user.getUsername() + " has used!")
+            .errorCode(HttpStatus.BAD_REQUEST.toString())
+            .build())
+        .switchIfEmpty(userRepository.save(User.builder()
+                .username(requestVo.getUsername())
+                .password(pbkdf2Encoder.encode(requestVo.getPassword()))
+                .roles(List.of(Role.ROLE_MEMBER))
+                .enabled(true)
+                .build())
+            .map(user1 -> MetaNephrenBaseResponse.builder()
+                .body(Map.of("created", user1))
+                .success(true)
+                .build()));
   }
 }

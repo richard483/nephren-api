@@ -1,6 +1,7 @@
 package com.example.metanephren.services;
 
 import com.example.metanephren.responses.MetaNephrenBaseResponse;
+import com.example.metanephren.securities.JWTUtil;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import lombok.extern.slf4j.Slf4j;
@@ -20,15 +21,19 @@ import java.util.Map;
 @Slf4j
 public class ImageServices {
   private final ReactiveGridFsTemplate gridFsTemplate;
+  private final JWTUtil jwtUtil;
 
   @Autowired
-  public ImageServices(ReactiveGridFsTemplate gridFsTemplate) {
+  public ImageServices(ReactiveGridFsTemplate gridFsTemplate, JWTUtil jwtUtil) {
     this.gridFsTemplate = gridFsTemplate;
+    this.jwtUtil = jwtUtil;
   }
 
   public Mono<MetaNephrenBaseResponse<Object>> uploadImage(String name,
       String desc,
-      Mono<FilePart> file) {
+      Mono<FilePart> file,
+      String token) {
+    String authenticatedUsername = jwtUtil.getUsernameFromToken(token);
     DBObject metaData = new BasicDBObject();
     metaData.put("name", name);
     metaData.put("desc", desc);
@@ -36,7 +41,14 @@ public class ImageServices {
             filePart.name(),
             metaData))
         .map(id -> MetaNephrenBaseResponse.builder()
-            .body(Map.of("id", id.toHexString(), "name", name, "desc", desc))
+            .body(Map.of("id",
+                id.toHexString(),
+                "name",
+                name,
+                "desc",
+                desc,
+                "user",
+                authenticatedUsername))
             .success(true)
             .build());
   }
