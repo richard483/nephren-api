@@ -28,8 +28,9 @@ public class ImageController {
   @PostMapping("/add")
   @PreAuthorize("hasRole('MEMBER')")
   public Mono<MetaNephrenBaseResponse<Object>> uploadPhoto(@RequestParam String title,
+      @RequestParam String desc,
       @RequestPart Mono<FilePart> image) {
-    return imageServices.uploadImage(title, "this is desc", image);
+    return imageServices.uploadImage(title, desc, image);
   }
 
   @GetMapping("/{id}")

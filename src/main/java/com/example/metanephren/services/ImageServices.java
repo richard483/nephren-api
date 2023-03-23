@@ -37,6 +37,7 @@ public class ImageServices {
             metaData))
         .map(id -> MetaNephrenBaseResponse.builder()
             .body(Map.of("id", id.toHexString(), "name", name, "desc", desc))
+            .success(true)
             .build());
   }
 
@@ -52,7 +53,7 @@ public class ImageServices {
       Document metadata = file.getMetadata();
       return MetaNephrenBaseResponse.builder()
           .body(Map.of("id",
-              metadata.getString("id"),
+              id,
               "name",
               metadata.getString("name"),
               "desc",
