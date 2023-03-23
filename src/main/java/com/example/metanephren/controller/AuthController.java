@@ -1,7 +1,7 @@
 package com.example.metanephren.controller;
 
-import com.example.metanephren.request.AuthRequestVo;
-import com.example.metanephren.request.RegisterRequestVo;
+import com.example.metanephren.requests.AuthRequestVo;
+import com.example.metanephren.requests.RegisterRequestVo;
 import com.example.metanephren.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
