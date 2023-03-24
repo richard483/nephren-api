@@ -21,6 +21,7 @@ public class AuthController {
   private final AuthService authService;
   @Value("${nephren-api-version}") private String appVersion;
   @Value("${nephren-application-name}") private String appName;
+  @Value("${last-updated}") private String lastUpdated;
 
 
   @Autowired
@@ -42,7 +43,7 @@ public class AuthController {
   @GetMapping("/version")
   public Mono<MetaNephrenBaseResponse<Object>> version() {
     return Mono.just(MetaNephrenBaseResponse.builder()
-        .body(Map.of("application", appName, "nephren-api version", appVersion))
+        .body(Map.of("application", appName, "nephren-api version", appVersion, "last-updated", lastUpdated))
         .success(true)
         .build());
   }
