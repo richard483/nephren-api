@@ -48,6 +48,7 @@ public class AuthService {
         .map(user -> MetaNephrenBaseResponse.builder()
             .errorMessage("The username " + user.getUsername() + " has used!")
             .errorCode(HttpStatus.BAD_REQUEST.toString())
+            .success(false)
             .build())
         .switchIfEmpty(userRepository.save(User.builder()
                 .username(requestVo.getUsername())
