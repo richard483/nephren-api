@@ -29,7 +29,8 @@ public class ImageController {
   @PostMapping("/add")
   @PreAuthorize("hasRole('MEMBER')")
   public Mono<MetaNephrenBaseResponse<Object>> uploadPhoto(@RequestParam String title,
-      @RequestParam String desc, @RequestHeader("Authorization") String token,
+      @RequestParam String desc,
+      @RequestHeader("Authorization") String token,
       @RequestPart Mono<FilePart> image) {
     return imageServices.uploadImage(title, desc, image, token);
   }
@@ -43,4 +44,16 @@ public class ImageController {
   public Mono<MetaNephrenBaseResponse<Object>> getPhotoInfo(@PathVariable String id) {
     return imageServices.getImageInformationFromId(id);
   }
+
+  @GetMapping("/info/page")
+  public Mono<MetaNephrenBaseResponse<Object>> getImageList(@RequestParam Integer page,
+      @RequestParam Integer contentPerPage) {
+    return imageServices.getImagesList(page, contentPerPage);
+  }
+
+  @GetMapping("/info/all")
+  public Mono<MetaNephrenBaseResponse<Object>> getAllImageInfoList() {
+    return imageServices.getAllImageInformationList();
+  }
+
 }
