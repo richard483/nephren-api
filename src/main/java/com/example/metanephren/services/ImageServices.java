@@ -1,7 +1,7 @@
 package com.example.metanephren.services;
 
+import com.example.metanephren.models.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.repositories.ImageGridFsRepository;
-import com.example.metanephren.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.securities.JWTUtil;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -18,6 +18,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -74,7 +75,7 @@ public class ImageServices {
           .body(Map.of(file.getId().asString(),
               id,
               "name",
-              metadata.getString("name"),
+              Objects.requireNonNull(metadata).getString("name"),
               "desc",
               metadata.getString("desc"),
               "uploader",
@@ -96,7 +97,8 @@ public class ImageServices {
   public Mono<MetaNephrenBaseResponse<Object>> getAllImageInformationList() {
     return gridFsTemplate.find(new Query(Criteria.where("_id").exists(true)).with(Sort.by(
             "uploadDate").ascending()))
-        .map(fl -> fl.getMetadata().append("id", fl.getId().toString().substring(19, 43)))
+        .map(fl -> Objects.requireNonNull(fl.getMetadata())
+            .append("id", fl.getId().toString().substring(19, 43)))
         .collectList()
         .map(dataList -> MetaNephrenBaseResponse.builder().body(dataList).build());
   }

@@ -8,6 +8,23 @@ services:
       - 27017:27017
     volumes:
       - mongodb_data_container:/data/db
+  zookeeper:
+    image: zookeeper
+    ports:
+      - 2181:2181
+  kafka:
+    image: wurstmeister/kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://localhost:29093,OUTSIDE://localhost:29092
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:29093,OUTSIDE://0.0.0.0:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+
 
 volumes:
   mongodb_data_container:

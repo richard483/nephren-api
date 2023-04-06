@@ -2,10 +2,10 @@ package com.example.metanephren.services;
 
 import com.example.metanephren.models.Role;
 import com.example.metanephren.models.User;
+import com.example.metanephren.models.requests.AuthRequestVo;
+import com.example.metanephren.models.requests.RegisterRequestVo;
+import com.example.metanephren.models.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.repositories.UserRepository;
-import com.example.metanephren.requests.AuthRequestVo;
-import com.example.metanephren.requests.RegisterRequestVo;
-import com.example.metanephren.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.securities.JWTUtil;
 import com.example.metanephren.securities.PBKDF2Encoder;
 import org.springframework.beans.factory.annotation.Autowired;

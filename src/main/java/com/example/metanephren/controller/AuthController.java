@@ -1,8 +1,8 @@
 package com.example.metanephren.controller;
 
-import com.example.metanephren.requests.AuthRequestVo;
-import com.example.metanephren.requests.RegisterRequestVo;
-import com.example.metanephren.responses.MetaNephrenBaseResponse;
+import com.example.metanephren.models.requests.AuthRequestVo;
+import com.example.metanephren.models.requests.RegisterRequestVo;
+import com.example.metanephren.models.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,12 @@ public class AuthController {
   @GetMapping("/version")
   public Mono<MetaNephrenBaseResponse<Object>> version() {
     return Mono.just(MetaNephrenBaseResponse.builder()
-        .body(Map.of("application", appName, "nephren-api version", appVersion, "last-updated", lastUpdated))
+        .body(Map.of("application",
+            appName,
+            "nephren-api version",
+            appVersion,
+            "last-updated",
+            lastUpdated))
         .success(true)
         .build());
   }

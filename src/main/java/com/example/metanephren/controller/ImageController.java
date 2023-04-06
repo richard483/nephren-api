@@ -1,6 +1,6 @@
 package com.example.metanephren.controller;
 
-import com.example.metanephren.responses.MetaNephrenBaseResponse;
+import com.example.metanephren.models.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.services.ImageServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.codec.multipart.FilePart;
