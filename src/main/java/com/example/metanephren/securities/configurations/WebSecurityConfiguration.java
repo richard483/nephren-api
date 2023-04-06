@@ -1,4 +1,4 @@
-package com.example.metanephren.configurations;
+package com.example.metanephren.securities.configurations;
 
 import com.example.metanephren.securities.AuthenticateManager;
 import com.example.metanephren.securities.SecurityContextRepository;

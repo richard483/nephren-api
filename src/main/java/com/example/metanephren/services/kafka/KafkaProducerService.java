@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class KafkaProducerServices {
+public class KafkaProducerService {
   private final KafkaTemplate<String, Message> kafkaTemplate;
 
   @Value("${spring.kafka.template.default-topic}") private String topic;
 
   @Autowired
-  public KafkaProducerServices(KafkaTemplate<String, Message> kafkaTemplate) {
+  public KafkaProducerService(KafkaTemplate<String, Message> kafkaTemplate) {
     this.kafkaTemplate = kafkaTemplate;
   }
 
