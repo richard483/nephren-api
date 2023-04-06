@@ -1,22 +1,34 @@
 package com.example.metanephren.services.kafka;
 
 import com.example.metanephren.models.Message;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class KafkaProducerServices {
-  private final ReactiveKafkaProducerTemplate<String, Message> reactiveKafkaProducerTemplate;
+  private final KafkaTemplate<String, Message> kafkaTemplate;
 
-  @Value("${spring.kafka.template.default-topic}")
-  private String topic;
+  @Value("${spring.kafka.template.default-topic}") private String topic;
 
-  public KafkaProducerServices(ReactiveKafkaProducerTemplate<String, Message> reactiveKafkaProducerTemplate) {
-    this.reactiveKafkaProducerTemplate = reactiveKafkaProducerTemplate;
+  @Autowired
+  public KafkaProducerServices(KafkaTemplate<String, Message> kafkaTemplate) {
+    this.kafkaTemplate = kafkaTemplate;
   }
 
-  public void send(Message message){
-    reactiveKafkaProducerTemplate.send(topic, "this is key",  message).subscribe();
+  public void send(Message message) {
+    kafkaTemplate.send(topic, message).whenComplete((messageSendResult, throwable) -> {
+      if (throwable != null) {
+        log.error("#KafkaProducerServices error on send : {} to : {} caused by {}",
+            message,
+            topic,
+            throwable.getMessage());
+      } else {
+        log.debug("#KafkaProducerServices success send : {} to : {}", message, topic);
+      }
+    });
   }
 }

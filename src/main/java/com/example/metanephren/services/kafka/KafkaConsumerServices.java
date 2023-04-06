@@ -3,33 +3,31 @@ package com.example.metanephren.services.kafka;
 import com.example.metanephren.models.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Headers;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 @Service
 @Slf4j
 public class KafkaConsumerServices {
-  private final ReactiveKafkaConsumerTemplate<String, Message> reactiveKafkaConsumerTemplate;
+  private final KafkaTemplate<String, Message> kafkaTemplate;
+  @Value("${spring.kafka.template.default-topic}") private String topic;
 
-  public KafkaConsumerServices(ReactiveKafkaConsumerTemplate<String, Message> reactiveKafkaConsumerTemplate) {
-    this.reactiveKafkaConsumerTemplate = reactiveKafkaConsumerTemplate;
+  @Autowired
+  public KafkaConsumerServices(KafkaTemplate<String, Message> kafkaTemplate) {
+    this.kafkaTemplate = kafkaTemplate;
   }
 
-  public Flux<Message> messageConsumer() {
-    return reactiveKafkaConsumerTemplate.receiveAutoAck()
-        .doOnNext(record -> log.info(
-            "#messageConsumer received record with key : {}, value : {}, topic : {}, offset, "
-                + "{}",
-            record.key(),
-            record.value(),
-            record.topic(),
-            record.offset()))
-        .map(ConsumerRecord::value)
-        .doOnNext(message -> log.info("#messageConsumer success consuming {}",
-            message.getClass().getSimpleName()))
-        .doOnError(throwable -> log.error("#messageConsumer error while because : {}",
-            throwable.getMessage()));
+  @KafkaListener(topics = "${spring.kafka.template.default-topic}",
+      groupId = "${spring.kafka.consumer.group-id}")
+  public void messageConsumer(@Payload Message message, @Headers MessageHeaders headers) {
+    log.info("#KafkaConsumerServices consuming: {}", message);
   }
 }
