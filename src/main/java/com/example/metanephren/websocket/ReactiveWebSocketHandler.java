@@ -29,12 +29,12 @@ public class ReactiveWebSocketHandler implements WebSocketHandler {
 
   @Override
   public Mono<Void> handle(WebSocketSession session) {
-    return session.send(messageFlux.map(message -> {
+    return session.send(messageFlux.handle((message, sink) -> {
       log.info("#ReactiveWebSocketHandler info : {}", message.getMessage());
       try {
-        return session.textMessage(objectMapper.writeValueAsString(message));
+        sink.next(session.textMessage(objectMapper.writeValueAsString(message)));
       } catch (JsonProcessingException e) {
-        throw new RuntimeException(e);
+        sink.error(new RuntimeException(e));
       }
     })).and(session.receive().map(WebSocketMessage::getPayloadAsText).log());
   }
