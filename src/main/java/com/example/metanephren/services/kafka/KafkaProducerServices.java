@@ -1,11 +1,13 @@
 package com.example.metanephren.services.kafka;
 
 import com.example.metanephren.models.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class KafkaProducerServices {
   private final ReactiveKafkaProducerTemplate<String, Message> reactiveKafkaProducerTemplate;
 
@@ -17,6 +19,8 @@ public class KafkaProducerServices {
   }
 
   public void send(Message message){
-    reactiveKafkaProducerTemplate.send(topic, "this is key",  message).subscribe();
+    reactiveKafkaProducerTemplate.send(topic,  message).subscribe();
+    log.info("#KafkaProducerServices success send message : {}, to topic : {}",
+        message, topic);
   }
 }
