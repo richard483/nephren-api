@@ -1,7 +1,7 @@
 package com.example.metanephren;
 
-import com.example.metanephren.services.kafka.KafkaConsumerServices;
-import com.example.metanephren.services.kafka.KafkaProducerServices;
+import com.example.metanephren.services.kafka.KafkaConsumerService;
+import com.example.metanephren.services.kafka.KafkaProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -15,9 +15,9 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 public class MetaNephrenApplication implements CommandLineRunner {
 
   @Autowired
-  KafkaProducerServices kafkaProducerServices;
+  KafkaProducerService kafkaProducerService;
   @Autowired
-  KafkaConsumerServices kafkaConsumerServices;
+  KafkaConsumerService kafkaConsumerService;
 
   public static void main(String[] args) {
     SpringApplication.run(MetaNephrenApplication.class, args);

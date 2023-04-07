@@ -12,8 +12,7 @@ import java.util.Collections;
 
 @Configuration
 public class KafkaConsumerConfiguration {
-  @Value("${spring.kafka.template.default-topic}")
-  private String topic;
+  @Value("${spring.kafka.template.default-topic}") private String topic;
 
   @Bean
   public ReceiverOptions<String, Message> kafkaReceiverOptions(KafkaProperties kafkaProperties) {

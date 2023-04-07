@@ -22,13 +22,13 @@ import java.util.Objects;
 
 @Service
 @Slf4j
-public class ImageServices {
+public class ImageService {
   private final ReactiveGridFsTemplate gridFsTemplate;
   private final JWTUtil jwtUtil;
   private final ImageGridFsRepository imageGridFsRepository;
 
   @Autowired
-  public ImageServices(ReactiveGridFsTemplate gridFsTemplate,
+  public ImageService(ReactiveGridFsTemplate gridFsTemplate,
       JWTUtil jwtUtil,
       ImageGridFsRepository imageGridFsRepository) {
     this.gridFsTemplate = gridFsTemplate;
@@ -85,7 +85,14 @@ public class ImageServices {
     });
   }
 
-  public Mono<MetaNephrenBaseResponse<Object>> getImagesList(Integer page, Integer contentPerPage) {
+  /**
+   *
+   * @param page index, starts from 0
+   * @param contentPerPage the number of image items per page
+   * @return list of items that already arranged per pages
+   */
+  public Mono<MetaNephrenBaseResponse<Object>> getImagesList(Integer page,
+      Integer contentPerPage) {
     return imageGridFsRepository.findAll(Sort.by("uploadDate").ascending(), page, contentPerPage)
         .collectList()
         .map(imageGridFs -> MetaNephrenBaseResponse.builder()

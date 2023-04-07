@@ -1,4 +1,4 @@
-package com.example.metanephren.websocket;
+package com.example.metanephren.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class WebSocketConfiguration {
   }
 
   @Bean
-  public HandlerMapping webSocketHandlerMapping(){
+  public HandlerMapping webSocketHandlerMapping() {
     Map<String, WebSocketHandler> map = new HashMap<>();
     map.put("/chat", webSocketHandler);
 

@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class KafkaProducerServices {
+public class KafkaProducerService {
   private final ReactiveKafkaProducerTemplate<String, Message> reactiveKafkaProducerTemplate;
 
   @Value("${spring.kafka.template.default-topic}")
   private String topic;
 
-  public KafkaProducerServices(ReactiveKafkaProducerTemplate<String, Message> reactiveKafkaProducerTemplate) {
+  public KafkaProducerService(ReactiveKafkaProducerTemplate<String, Message> reactiveKafkaProducerTemplate) {
     this.reactiveKafkaProducerTemplate = reactiveKafkaProducerTemplate;
   }
 

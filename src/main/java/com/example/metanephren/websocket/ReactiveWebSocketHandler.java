@@ -1,7 +1,7 @@
 package com.example.metanephren.websocket;
 
 import com.example.metanephren.models.Message;
-import com.example.metanephren.services.kafka.KafkaConsumerServices;
+import com.example.metanephren.services.kafka.KafkaConsumerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -21,16 +21,15 @@ public class ReactiveWebSocketHandler implements WebSocketHandler {
   private final ObjectMapper objectMapper;
 
   @Autowired
-  public ReactiveWebSocketHandler(KafkaConsumerServices kafkaConsumerServices,
+  public ReactiveWebSocketHandler(KafkaConsumerService kafkaConsumerService,
       ObjectMapper objectMapper) {
-    messageFlux = kafkaConsumerServices.messageConsumer();
+    messageFlux = kafkaConsumerService.messageConsumer();
     this.objectMapper = objectMapper;
   }
 
   @Override
   public Mono<Void> handle(WebSocketSession session) {
     return session.send(messageFlux.handle((message, sink) -> {
-      log.info("#ReactiveWebSocketHandler info : {}", message.getMessage());
       try {
         sink.next(session.textMessage(objectMapper.writeValueAsString(message)));
       } catch (JsonProcessingException e) {
