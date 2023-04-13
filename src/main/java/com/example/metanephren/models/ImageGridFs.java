@@ -13,8 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImageGridFs {
-  @Id
-  private String id;
+  @Id private String id;
   private String filename;
   private Date uploadDate;
 }

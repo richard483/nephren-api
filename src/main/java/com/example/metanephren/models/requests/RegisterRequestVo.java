@@ -1,4 +1,4 @@
-package com.example.metanephren.requests;
+package com.example.metanephren.models.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class AuthRequestVo {
+@NoArgsConstructor
+public class RegisterRequestVo {
   private String username;
   private String password;
 }

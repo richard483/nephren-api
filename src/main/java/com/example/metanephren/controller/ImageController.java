@@ -1,7 +1,7 @@
 package com.example.metanephren.controller;
 
-import com.example.metanephren.responses.MetaNephrenBaseResponse;
-import com.example.metanephren.services.ImageServices;
+import com.example.metanephren.models.responses.MetaNephrenBaseResponse;
+import com.example.metanephren.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,11 +19,11 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("api/photo")
 public class ImageController {
-  ImageServices imageServices;
+  ImageService imageService;
 
   @Autowired
-  public ImageController(ImageServices imageServices) {
-    this.imageServices = imageServices;
+  public ImageController(ImageService imageService) {
+    this.imageService = imageService;
   }
 
   @PostMapping("/add")
@@ -32,28 +32,28 @@ public class ImageController {
       @RequestParam String desc,
       @RequestHeader("Authorization") String token,
       @RequestPart Mono<FilePart> image) {
-    return imageServices.uploadImage(title, desc, image, token);
+    return imageService.uploadImage(title, desc, image, token);
   }
 
   @GetMapping("/{id}")
   public Mono<Void> getPhoto(@PathVariable String id, ServerWebExchange serverWebExchange) {
-    return imageServices.getImageFromId(id, serverWebExchange);
+    return imageService.getImageFromId(id, serverWebExchange);
   }
 
   @GetMapping("/info/{id}")
   public Mono<MetaNephrenBaseResponse<Object>> getPhotoInfo(@PathVariable String id) {
-    return imageServices.getImageInformationFromId(id);
+    return imageService.getImageInformationFromId(id);
   }
 
   @GetMapping("/info/page")
   public Mono<MetaNephrenBaseResponse<Object>> getImageList(@RequestParam Integer page,
       @RequestParam Integer contentPerPage) {
-    return imageServices.getImagesList(page, contentPerPage);
+    return imageService.getImagesList(page, contentPerPage);
   }
 
   @GetMapping("/info/all")
   public Mono<MetaNephrenBaseResponse<Object>> getAllImageInfoList() {
-    return imageServices.getAllImageInformationList();
+    return imageService.getAllImageInformationList();
   }
 
 }

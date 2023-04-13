@@ -1,8 +1,9 @@
-package com.example.metanephren.services;
+package com.example.metanephren.servicesImpl;
 
+import com.example.metanephren.models.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.repositories.ImageGridFsRepository;
-import com.example.metanephren.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.securities.JWTUtil;
+import com.example.metanephren.services.ImageService;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import lombok.extern.slf4j.Slf4j;
@@ -18,16 +19,17 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
-public class ImageServices {
+public class ImageServiceImpl implements ImageService {
   private final ReactiveGridFsTemplate gridFsTemplate;
   private final JWTUtil jwtUtil;
   private final ImageGridFsRepository imageGridFsRepository;
 
   @Autowired
-  public ImageServices(ReactiveGridFsTemplate gridFsTemplate,
+  public ImageServiceImpl(ReactiveGridFsTemplate gridFsTemplate,
       JWTUtil jwtUtil,
       ImageGridFsRepository imageGridFsRepository) {
     this.gridFsTemplate = gridFsTemplate;
@@ -35,6 +37,7 @@ public class ImageServices {
     this.imageGridFsRepository = imageGridFsRepository;
   }
 
+  @Override
   public Mono<MetaNephrenBaseResponse<Object>> uploadImage(String name,
       String desc,
       Mono<FilePart> file,
@@ -60,6 +63,7 @@ public class ImageServices {
             .build());
   }
 
+  @Override
   public Mono<Void> getImageFromId(String id, ServerWebExchange exchange) {
     return gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)))
         .log()
@@ -67,6 +71,7 @@ public class ImageServices {
         .flatMap(r -> exchange.getResponse().writeWith(r.getDownloadStream()));
   }
 
+  @Override
   public Mono<MetaNephrenBaseResponse<Object>> getImageInformationFromId(String id) {
     return gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id))).map(file -> {
       Document metadata = file.getMetadata();
@@ -74,7 +79,7 @@ public class ImageServices {
           .body(Map.of(file.getId().asString(),
               id,
               "name",
-              metadata.getString("name"),
+              Objects.requireNonNull(metadata).getString("name"),
               "desc",
               metadata.getString("desc"),
               "uploader",
@@ -84,6 +89,12 @@ public class ImageServices {
     });
   }
 
+  /**
+   * @param page           index, starts from 0
+   * @param contentPerPage the number of image items per page
+   * @return list of items that already arranged per pages
+   */
+  @Override
   public Mono<MetaNephrenBaseResponse<Object>> getImagesList(Integer page, Integer contentPerPage) {
     return imageGridFsRepository.findAll(Sort.by("uploadDate").ascending(), page, contentPerPage)
         .collectList()
@@ -93,10 +104,12 @@ public class ImageServices {
             .build());
   }
 
+  @Override
   public Mono<MetaNephrenBaseResponse<Object>> getAllImageInformationList() {
     return gridFsTemplate.find(new Query(Criteria.where("_id").exists(true)).with(Sort.by(
             "uploadDate").ascending()))
-        .map(fl -> fl.getMetadata().append("id", fl.getId().toString().substring(19, 43)))
+        .map(fl -> Objects.requireNonNull(fl.getMetadata())
+            .append("id", fl.getId().toString().substring(19, 43)))
         .collectList()
         .map(dataList -> MetaNephrenBaseResponse.builder().body(dataList).build());
   }

@@ -1,8 +1,8 @@
 package com.example.metanephren.controller;
 
 import com.example.metanephren.models.User;
+import com.example.metanephren.models.responses.MetaNephrenBaseListResponse;
 import com.example.metanephren.repositories.UserRepository;
-import com.example.metanephren.responses.MetaNephrenBaseListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

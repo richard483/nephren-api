@@ -4,7 +4,7 @@ import com.example.metanephren.models.Role;
 import com.example.metanephren.models.User;
 import com.example.metanephren.repositories.ImageGridFsRepository;
 import com.example.metanephren.repositories.UserRepository;
-import com.example.metanephren.requests.RegisterRequestVo;
+import com.example.metanephren.models.requests.RegisterRequestVo;
 import com.example.metanephren.securities.PBKDF2Encoder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
