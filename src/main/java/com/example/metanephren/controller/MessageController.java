@@ -1,29 +1,28 @@
 package com.example.metanephren.controller;
 
-import com.example.metanephren.models.Message;
-import com.example.metanephren.services.kafka.KafkaConsumerService;
-import com.example.metanephren.services.kafka.KafkaProducerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.metanephren.models.requests.MessageRequestVo;
+import com.example.metanephren.services.MessageService;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/messenger")
 public class MessageController {
-  public final KafkaConsumerService kafkaConsumerService;
-  public final KafkaProducerService kafkaProducerService;
+  public final MessageService messageService;
 
-  @Autowired
-  public MessageController(KafkaConsumerService kafkaConsumerService,
-      KafkaProducerService kafkaProducerService) {
-    this.kafkaConsumerService = kafkaConsumerService;
-    this.kafkaProducerService = kafkaProducerService;
+  public MessageController(MessageService messageService) {
+    this.messageService = messageService;
   }
 
   @PutMapping("/put")
-  public void putKafka(@RequestBody Message message) {
-    kafkaProducerService.send(message);
+  public Mono<Void> putKafka(@RequestBody MessageRequestVo messageRequest,
+      @RequestHeader("Authorization") String token) {
+    return messageService.sendMessage(messageRequest, token);
   }
 }

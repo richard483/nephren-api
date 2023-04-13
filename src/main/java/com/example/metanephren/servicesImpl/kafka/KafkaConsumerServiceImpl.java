@@ -24,7 +24,7 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
         .doOnNext(message -> log.info("#KafkaConsumerServices messageConsumer success consuming {}",
             message.getClass().getSimpleName()))
         .doOnError(throwable -> log.error(
-            "#KafkaConsumerServices messageConsumer error while " + "because : {}",
+            "#KafkaConsumerServices messageConsumer error because : {}",
             throwable.getMessage()));
   }
 }

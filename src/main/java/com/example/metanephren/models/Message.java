@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.Date;
 
@@ -14,7 +15,6 @@ import java.util.Date;
 public class Message {
   private String id;
   private String message;
-  private String senderId;
-  private String receiverId;
-  private Date time;
+  private String senderUsername;
+  private long timestamp;
 }
