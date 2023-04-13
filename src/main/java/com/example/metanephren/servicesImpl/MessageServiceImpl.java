@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ public class MessageServiceImpl implements MessageService {
             .message(messageRequest.getMessage())
             .senderUsername(jwtUtil.getUsernameFromToken(token))
             .timestamp(
-                new Date().getTime())
+                Instant.now().getEpochSecond())
             .build();
     kafkaProducerService.send(message);
     return Mono.empty();
