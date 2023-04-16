@@ -1,13 +1,14 @@
 package com.example.metanephren.servicesImpl;
 
-import com.example.metanephren.models.responses.MetaNephrenBaseResponse;
+import com.example.metanephren.models.Image;
+import com.example.metanephren.models.ImageGridFs;
 import com.example.metanephren.repositories.ImageGridFsRepository;
 import com.example.metanephren.securities.JWTUtil;
 import com.example.metanephren.services.ImageService;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -16,10 +17,8 @@ import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
-import java.util.Objects;
 
 @Service
 @Slf4j
@@ -38,7 +37,7 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
-  public Mono<MetaNephrenBaseResponse<Object>> uploadImage(String name,
+  public Mono<Image> uploadImage(String name,
       String desc,
       Mono<FilePart> file,
       String token) {
@@ -50,16 +49,11 @@ public class ImageServiceImpl implements ImageService {
     return file.flatMap(filePart -> gridFsTemplate.store(filePart.content(),
             filePart.name(),
             metaData))
-        .map(id -> MetaNephrenBaseResponse.builder()
-            .body(Map.of("id",
-                id.toHexString(),
-                "name",
-                name,
-                "desc",
-                desc,
-                "uploader",
-                authenticatedUsername))
-            .success(true)
+        .map(id -> Image.builder()
+            .id(id.toHexString())
+            .name(name)
+            .desc(desc)
+            .uploader(authenticatedUsername)
             .build());
   }
 
@@ -72,21 +66,8 @@ public class ImageServiceImpl implements ImageService {
   }
 
   @Override
-  public Mono<MetaNephrenBaseResponse<Object>> getImageInformationFromId(String id) {
-    return gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id))).map(file -> {
-      Document metadata = file.getMetadata();
-      return MetaNephrenBaseResponse.builder()
-          .body(Map.of(file.getId().asString(),
-              id,
-              "name",
-              Objects.requireNonNull(metadata).getString("name"),
-              "desc",
-              metadata.getString("desc"),
-              "uploader",
-              metadata.getString("uploader")))
-          .success(true)
-          .build();
-    });
+  public Mono<GridFSFile> getImageInformationFromId(String id) {
+    return gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)));
   }
 
   /**
@@ -95,23 +76,14 @@ public class ImageServiceImpl implements ImageService {
    * @return list of items that already arranged per pages
    */
   @Override
-  public Mono<MetaNephrenBaseResponse<Object>> getImagesList(Integer page, Integer contentPerPage) {
-    return imageGridFsRepository.findAll(Sort.by("uploadDate").ascending(), page, contentPerPage)
-        .collectList()
-        .map(imageGridFs -> MetaNephrenBaseResponse.builder()
-            .body(imageGridFs)
-            .success(true)
-            .build());
+  public Flux<ImageGridFs> getImagesList(Integer page, Integer contentPerPage) {
+    return imageGridFsRepository.findAll(Sort.by("uploadDate").ascending(), page, contentPerPage);
   }
 
   @Override
-  public Mono<MetaNephrenBaseResponse<Object>> getAllImageInformationList() {
+  public Flux<GridFSFile> getAllImageInformationList() {
     return gridFsTemplate.find(new Query(Criteria.where("_id").exists(true)).with(Sort.by(
-            "uploadDate").ascending()))
-        .map(fl -> Objects.requireNonNull(fl.getMetadata())
-            .append("id", fl.getId().toString().substring(19, 43)))
-        .collectList()
-        .map(dataList -> MetaNephrenBaseResponse.builder().body(dataList).build());
+        "uploadDate").ascending()));
   }
 
 }
