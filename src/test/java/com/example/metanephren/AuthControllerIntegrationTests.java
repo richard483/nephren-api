@@ -2,12 +2,10 @@ package com.example.metanephren;
 
 import com.example.metanephren.models.Role;
 import com.example.metanephren.models.User;
-import com.example.metanephren.repositories.ImageGridFsRepository;
-import com.example.metanephren.repositories.UserRepository;
 import com.example.metanephren.models.requests.RegisterRequestVo;
+import com.example.metanephren.repositories.UserRepository;
 import com.example.metanephren.securities.PBKDF2Encoder;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +21,18 @@ import java.util.List;
 @SpringBootTest()
 @AutoConfigureWebTestClient
 @Slf4j
-class AuthControllerTests {
+class AuthControllerIntegrationTests {
 
   private static final String USER_PASSWORD = "password123@#PASS";
   private static final String USER_NAME = "username";
-  ImageGridFsRepository imageGridFsRepository;
   UserRepository userRepository;
   WebTestClient webTestClient;
   PBKDF2Encoder pbkdf2Encoder;
 
   @Autowired
-  public AuthControllerTests(ImageGridFsRepository imageGridFsRepository,
-      UserRepository userRepository,
+  public AuthControllerIntegrationTests(UserRepository userRepository,
       WebTestClient webTestClient,
       PBKDF2Encoder pbkdf2Encoder) {
-    this.imageGridFsRepository = imageGridFsRepository;
     this.userRepository = userRepository;
     this.webTestClient = webTestClient;
     this.pbkdf2Encoder = pbkdf2Encoder;
@@ -45,22 +40,7 @@ class AuthControllerTests {
 
   @BeforeEach
   void beforeEach() {
-    this.imageGridFsRepository.deleteAll().subscribe();
     this.userRepository.deleteAll().subscribe();
-  }
-
-  @Test
-  void dummyTest() {
-    userRepository.findUserByUsername(USER_NAME).subscribe(user -> Assertions.assertNull(user));
-
-    userRepository.save(User.builder()
-        .roles(List.of(Role.ROLE_MEMBER))
-        .enabled(true)
-        .password(USER_PASSWORD)
-        .username(USER_NAME)
-        .build());
-
-    userRepository.findUserByUsername(USER_NAME).subscribe(user -> Assertions.assertNotNull(user));
   }
 
   @Test
