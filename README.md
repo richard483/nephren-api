@@ -4,7 +4,7 @@ Postman: https://www.postman.com/speeding-equinox-650353/workspace/meta-api
 ## Technology used to build this project
 - Reactive Spring Boot
 - Mongo (Served on Mongo Atlas)
-- Kafka (Served on Confluence)
+- Kafka (Served on Confluent)
 - WebSocket
 
 ## Reference:
