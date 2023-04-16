@@ -46,7 +46,7 @@ public class ReactiveWebSocketHandler implements WebSocketHandler {
 
     return session.send(messageFlux.handle((message, sink) -> {
       try {
-        if (!claims.get("role", List.class).contains(Role.ROLE_MEMBER)) {
+        if (!claims.get("role", List.class).contains(Role.ROLE_MEMBER.toString())) {
           sink.error(new Exception("Unauthorized, Login First"));
           return;
         }
