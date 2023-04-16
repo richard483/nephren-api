@@ -23,7 +23,7 @@ import java.util.List;
 @SpringBootTest()
 @AutoConfigureWebTestClient
 @Slf4j
-class AuthControllerTests {
+class AuthControllerIntegrationTests {
 
   private static final String USER_PASSWORD = "password123@#PASS";
   private static final String USER_NAME = "username";
@@ -33,7 +33,7 @@ class AuthControllerTests {
   PBKDF2Encoder pbkdf2Encoder;
 
   @Autowired
-  public AuthControllerTests(ImageGridFsRepository imageGridFsRepository,
+  public AuthControllerIntegrationTests(ImageGridFsRepository imageGridFsRepository,
       UserRepository userRepository,
       WebTestClient webTestClient,
       PBKDF2Encoder pbkdf2Encoder) {
