@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class CacheJWTAspect {
+  private static final String HASH_KEY = "JWT";
   private final RedisServiceImpl redisService;
   private final JWTUtil jwtUtil;
 
@@ -30,7 +31,7 @@ public class CacheJWTAspect {
     MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
     CacheJWT cacheJWT = methodSignature.getMethod().getAnnotation(CacheJWT.class);
     String username = AspectUtil.parseExpression(cacheJWT.userName(), proceedingJoinPoint);
-    String existingToken = (String) redisService.get("JWT#" + username);
+    String existingToken = (String) redisService.get("JWT#" + username, HASH_KEY);
 
     if (existingToken != null && jwtUtil.validateToken(existingToken)) {
       log.info("#CacheJWTAspect returned token from existing data on redis");
@@ -39,7 +40,7 @@ public class CacheJWTAspect {
     Object proceedJoinPoint = proceedingJoinPoint.proceed();
 
     if (proceedJoinPoint != null) {
-      redisService.set("JWT#" + username, proceedJoinPoint.toString());
+      redisService.set("JWT#" + username, HASH_KEY, proceedJoinPoint.toString());
       log.info("#CacheJWTAspect storing new generated token to redis");
     }
 

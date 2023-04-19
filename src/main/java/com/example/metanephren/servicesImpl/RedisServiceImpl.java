@@ -15,12 +15,12 @@ public class RedisServiceImpl implements RedisService {
   }
 
   @Override
-  public void set(String key, String value) {
-    stringRedisTemplate.opsForValue().set(key, value);
+  public void set(String key, String hashKey, String value) {
+    stringRedisTemplate.opsForHash().put(key, hashKey, value);
   }
 
   @Override
-  public Object get(String key) {
-    return stringRedisTemplate.opsForValue().get(key);
+  public Object get(String key, String hashKey) {
+    return stringRedisTemplate.opsForHash().get(key, hashKey);
   }
 }
