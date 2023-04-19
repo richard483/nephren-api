@@ -27,12 +27,15 @@ services:
   redis:
     container_name: redis
     image: redis:7
-    command: redis-server /usr/local/etc/redis/redis.conf
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
     ports:
-      - 6379:6379
+      - '6379:6379'
     volumes:
-      - ./config/redis.conf:/usr/local/etc/redis/redis.conf
-
+      - 'redis_data:/bitnami/redis/data'
 
 volumes:
   mongodb_data_container:
+    driver: local
+  redis_data:
+    driver: local
