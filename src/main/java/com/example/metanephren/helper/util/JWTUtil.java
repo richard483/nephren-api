@@ -1,4 +1,4 @@
-package com.example.metanephren.securities;
+package com.example.metanephren.helper.util;
 
 import com.example.metanephren.helper.annotation.CacheJWT;
 import com.example.metanephren.models.User;

@@ -2,7 +2,7 @@ package com.example.metanephren.helper;
 
 import com.example.metanephren.helper.annotation.CacheJWT;
 import com.example.metanephren.helper.util.AspectUtil;
-import com.example.metanephren.securities.JWTUtil;
+import com.example.metanephren.helper.util.JWTUtil;
 import com.example.metanephren.servicesImpl.RedisServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

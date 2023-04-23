@@ -2,7 +2,7 @@ package com.example.metanephren.servicesImpl;
 
 import com.example.metanephren.models.Message;
 import com.example.metanephren.models.requests.MessageRequestVo;
-import com.example.metanephren.securities.JWTUtil;
+import com.example.metanephren.helper.util.JWTUtil;
 import com.example.metanephren.services.MessageService;
 import com.example.metanephren.services.kafka.KafkaProducerService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.UUID;
 
 @Service

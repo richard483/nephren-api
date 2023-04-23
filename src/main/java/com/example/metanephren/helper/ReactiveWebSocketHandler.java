@@ -1,8 +1,8 @@
-package com.example.metanephren.websocket;
+package com.example.metanephren.helper;
 
 import com.example.metanephren.models.Message;
 import com.example.metanephren.models.Role;
-import com.example.metanephren.securities.JWTUtil;
+import com.example.metanephren.helper.util.JWTUtil;
 import com.example.metanephren.services.kafka.KafkaConsumerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
