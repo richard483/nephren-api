@@ -1,8 +1,8 @@
-package com.example.metanephren.websocket;
+package com.example.metanephren.helper;
 
 import com.example.metanephren.models.Message;
 import com.example.metanephren.models.Role;
-import com.example.metanephren.securities.JWTUtil;
+import com.example.metanephren.helper.util.JWTUtil;
 import com.example.metanephren.services.kafka.KafkaConsumerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +22,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-public class ReactiveWebSocketHandler implements WebSocketHandler {
+public class ReactiveWebSocketHandlerMessage implements WebSocketHandler {
   private final Flux<Message> messageFlux;
 
   private final ObjectMapper objectMapper;
@@ -30,7 +30,7 @@ public class ReactiveWebSocketHandler implements WebSocketHandler {
   private final JWTUtil jwtUtil;
 
   @Autowired
-  public ReactiveWebSocketHandler(KafkaConsumerService kafkaConsumerService,
+  public ReactiveWebSocketHandlerMessage(KafkaConsumerService kafkaConsumerService,
       ObjectMapper objectMapper,
       JWTUtil jwtUtil) {
     messageFlux = kafkaConsumerService.messageConsumer();
@@ -46,7 +46,7 @@ public class ReactiveWebSocketHandler implements WebSocketHandler {
 
     return session.send(messageFlux.handle((message, sink) -> {
       try {
-        if (!claims.get("role", List.class).contains(Role.ROLE_MEMBER)) {
+        if (!claims.get("role", List.class).contains(Role.ROLE_MEMBER.toString())) {
           sink.error(new Exception("Unauthorized, Login First"));
           return;
         }

@@ -20,6 +20,6 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
 
   public void send(Message message) {
     reactiveKafkaProducerTemplate.send(topic, message).subscribe();
-    log.info("#KafkaProducerServices success send message : {}, to topic : {}", message, topic);
+    log.debug("#KafkaProducerServices success send message : {}, to topic : {}", message, topic);
   }
 }

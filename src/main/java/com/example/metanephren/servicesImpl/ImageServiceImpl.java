@@ -3,7 +3,7 @@ package com.example.metanephren.servicesImpl;
 import com.example.metanephren.models.Image;
 import com.example.metanephren.models.ImageGridFs;
 import com.example.metanephren.repositories.ImageGridFsRepository;
-import com.example.metanephren.securities.JWTUtil;
+import com.example.metanephren.helper.util.JWTUtil;
 import com.example.metanephren.services.ImageService;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
