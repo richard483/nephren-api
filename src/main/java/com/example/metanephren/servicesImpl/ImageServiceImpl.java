@@ -62,7 +62,8 @@ public class ImageServiceImpl implements ImageService {
     return gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)))
         .log()
         .flatMap(gridFsTemplate::getResource)
-        .flatMap(r -> exchange.getResponse().writeWith(r.getDownloadStream()));
+        .flatMap(r -> exchange.getResponse().writeWith(r.getDownloadStream())).switchIfEmpty(
+            Mono.error(new Exception("Image not found")));
   }
 
   @Override
