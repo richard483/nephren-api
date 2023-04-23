@@ -50,7 +50,7 @@ public class ImageController {
     return imageService.getImageInformationFromId(id).map(file -> {
       Document metadata = file.getMetadata();
       return MetaNephrenBaseResponse.builder()
-          .body(Map.of(file.getId().asString(),
+          .body(Map.of("id",
               id,
               "name",
               Objects.requireNonNull(metadata).getString("name"),
