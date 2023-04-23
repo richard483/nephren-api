@@ -173,6 +173,6 @@ public class ImageControllerIntegrationTest {
         .header("Authorization", token)
         .exchange()
         .expectStatus()
-        .is5xxServerError();
+        .isOk();
   }
 }
