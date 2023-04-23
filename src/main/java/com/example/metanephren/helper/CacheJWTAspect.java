@@ -34,14 +34,14 @@ public class CacheJWTAspect {
     String existingToken = (String) redisService.get("JWT#" + username, HASH_KEY);
 
     if (existingToken != null && jwtUtil.validateToken(existingToken)) {
-      log.info("#CacheJWTAspect returned token from existing data on redis");
+      log.debug("#CacheJWTAspect returned token from existing data on redis");
       return existingToken;
     }
     Object proceedJoinPoint = proceedingJoinPoint.proceed();
 
     if (proceedJoinPoint != null) {
       redisService.set("JWT#" + username, HASH_KEY, proceedJoinPoint.toString());
-      log.info("#CacheJWTAspect storing new generated token to redis");
+      log.debug("#CacheJWTAspect storing new generated token to redis");
     }
 
     return proceedJoinPoint;

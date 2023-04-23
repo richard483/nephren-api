@@ -25,7 +25,8 @@ public class AspectUtil {
           new DefaultParameterNameDiscoverer());
       return (String) expression.getValue(methodBasedEvaluationContext);
     } catch (Exception e) {
-      log.info("#AspectUtil error 'parseExpression' fkr key: {} with error ; {}", key, e.getMessage());
+      log.debug("#AspectUtil error 'parseExpression' fkr key: {} with error ; {}", key,
+          e.getMessage());
       return null;
     }
   }
