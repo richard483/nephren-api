@@ -22,7 +22,7 @@ import java.util.Objects;
 
 @Component
 @Slf4j
-public class ReactiveWebSocketHandler implements WebSocketHandler {
+public class ReactiveWebSocketHandlerMessage implements WebSocketHandler {
   private final Flux<Message> messageFlux;
 
   private final ObjectMapper objectMapper;
@@ -30,7 +30,7 @@ public class ReactiveWebSocketHandler implements WebSocketHandler {
   private final JWTUtil jwtUtil;
 
   @Autowired
-  public ReactiveWebSocketHandler(KafkaConsumerService kafkaConsumerService,
+  public ReactiveWebSocketHandlerMessage(KafkaConsumerService kafkaConsumerService,
       ObjectMapper objectMapper,
       JWTUtil jwtUtil) {
     messageFlux = kafkaConsumerService.messageConsumer();
