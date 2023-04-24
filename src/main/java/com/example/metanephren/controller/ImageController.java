@@ -1,5 +1,6 @@
 package com.example.metanephren.controller;
 
+import com.example.metanephren.models.Image;
 import com.example.metanephren.models.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.services.ImageService;
 import org.bson.Document;
@@ -32,12 +33,12 @@ public class ImageController {
 
   @PostMapping("/add")
   @PreAuthorize("hasRole('MEMBER')")
-  public Mono<MetaNephrenBaseResponse<Object>> uploadPhoto(@RequestParam String title,
+  public Mono<MetaNephrenBaseResponse<Image>> uploadPhoto(@RequestParam String title,
       @RequestParam String desc,
       @RequestHeader("Authorization") String token,
       @RequestPart Mono<FilePart> imageFile) {
     return imageService.uploadImage(title, desc, imageFile, token)
-        .map(image1 -> MetaNephrenBaseResponse.builder().body(image1).success(true).build());
+        .map(image1 -> MetaNephrenBaseResponse.<Image>builder().body(image1).success(true).build());
   }
 
   @GetMapping("/{id}")
@@ -50,7 +51,7 @@ public class ImageController {
     return imageService.getImageInformationFromId(id).map(file -> {
       Document metadata = file.getMetadata();
       return MetaNephrenBaseResponse.builder()
-          .body(Map.of(file.getId().asString(),
+          .body(Map.of("id",
               id,
               "name",
               Objects.requireNonNull(metadata).getString("name"),
@@ -80,7 +81,7 @@ public class ImageController {
         .map(fl -> Objects.requireNonNull(fl.getMetadata())
             .append("id", fl.getId().toString().substring(19, 43)))
         .collectList()
-        .map(dataList -> MetaNephrenBaseResponse.builder().body(dataList).build());
+        .map(dataList -> MetaNephrenBaseResponse.builder().body(dataList).success(true).build());
   }
 
 }

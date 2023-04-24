@@ -6,7 +6,7 @@ import com.example.metanephren.models.requests.AuthRequestVo;
 import com.example.metanephren.models.requests.RegisterRequestVo;
 import com.example.metanephren.models.responses.MetaNephrenBaseResponse;
 import com.example.metanephren.repositories.UserRepository;
-import com.example.metanephren.securities.JWTUtil;
+import com.example.metanephren.helper.util.JWTUtil;
 import com.example.metanephren.securities.PBKDF2Encoder;
 import com.example.metanephren.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;

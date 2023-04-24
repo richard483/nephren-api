@@ -21,7 +21,7 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
   public Flux<Message> messageConsumer() {
     return reactiveKafkaConsumerTemplate.receiveAutoAck()
         .map(ConsumerRecord::value)
-        .doOnNext(message -> log.info("#KafkaConsumerServices messageConsumer success consuming {}",
+        .doOnNext(message -> log.debug("#KafkaConsumerServices messageConsumer success consuming {}",
             message.getClass().getSimpleName()))
         .doOnError(throwable -> log.error(
             "#KafkaConsumerServices messageConsumer error because : {}",

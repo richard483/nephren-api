@@ -1,5 +1,6 @@
-package com.example.metanephren.securities;
+package com.example.metanephren.helper.util;
 
+import com.example.metanephren.helper.annotation.CacheJWT;
 import com.example.metanephren.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -40,6 +41,7 @@ public class JWTUtil {
   }
 
 
+  @CacheJWT(userName = "#user.username")
   public String generateToken(User user) {
     Map<String, Object> claims = new HashMap<>();
 
@@ -57,7 +59,7 @@ public class JWTUtil {
   }
 
   private String doGenerateToken(Map<String, Object> claims, String username) {
-    Long expTimeLong = Long.parseLong(expTime);
+    long expTimeLong = Long.parseLong(expTime);
     final Date createdDate = new Date();
     final Date expDate = new Date(createdDate.getTime() + expTimeLong * 1000);
 
