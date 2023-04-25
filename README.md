@@ -5,6 +5,7 @@ Postman: https://www.postman.com/speeding-equinox-650353/workspace/meta-api
 - Reactive Spring Boot
 - Mongo (Served on Mongo Atlas)
 - Kafka (Served on Confluent)
+- Redis (Served on Redis Cloud)
 - WebSocket
 
 ## Reference:
