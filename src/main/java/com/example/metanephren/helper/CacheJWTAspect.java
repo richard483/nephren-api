@@ -33,7 +33,7 @@ public class CacheJWTAspect {
     String username = AspectUtil.parseExpression(cacheJWT.userName(), proceedingJoinPoint);
     String existingToken = (String) redisService.get("JWT#" + username, HASH_KEY);
 
-    if (existingToken != null && jwtUtil.validateToken(existingToken)) {
+    if (existingToken != null && !jwtUtil.isJWTExpiredWithoutException(existingToken)) {
       log.debug("#CacheJWTAspect returned token from existing data on redis");
       return existingToken;
     }

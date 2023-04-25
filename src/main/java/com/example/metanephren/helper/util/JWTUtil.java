@@ -1,5 +1,7 @@
 package com.example.metanephren.helper.util;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.metanephren.helper.annotation.CacheJWT;
 import com.example.metanephren.models.User;
 import io.jsonwebtoken.Claims;
@@ -70,6 +72,15 @@ public class JWTUtil {
         .setExpiration(expDate)
         .signWith(key)
         .compact();
+  }
+
+  private DecodedJWT decodeJWT(String token){
+    return JWT.decode(token);
+  }
+
+  public boolean isJWTExpiredWithoutException(String token){
+    Date today = new Date();
+    return today.after(decodeJWT(token).getExpiresAt());
   }
 
 }
