@@ -3,7 +3,7 @@ package com.example.metanephren.helper;
 import com.example.metanephren.models.Message;
 import com.example.metanephren.models.Role;
 import com.example.metanephren.helper.util.JWTUtil;
-import com.example.metanephren.services.kafka.KafkaConsumerService;
+import com.example.metanephren.services.message.MessageConsumerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -30,10 +30,10 @@ public class ReactiveWebSocketHandlerMessage implements WebSocketHandler {
   private final JWTUtil jwtUtil;
 
   @Autowired
-  public ReactiveWebSocketHandlerMessage(KafkaConsumerService kafkaConsumerService,
+  public ReactiveWebSocketHandlerMessage(MessageConsumerService messageConsumerService,
       ObjectMapper objectMapper,
       JWTUtil jwtUtil) {
-    messageFlux = kafkaConsumerService.messageConsumer();
+    messageFlux = messageConsumerService.messageConsumer();
     this.objectMapper = objectMapper;
     this.jwtUtil = jwtUtil;
   }

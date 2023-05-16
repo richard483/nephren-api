@@ -4,7 +4,7 @@ import com.example.metanephren.models.Message;
 import com.example.metanephren.models.requests.MessageRequestVo;
 import com.example.metanephren.helper.util.JWTUtil;
 import com.example.metanephren.services.MessageService;
-import com.example.metanephren.services.kafka.KafkaProducerService;
+import com.example.metanephren.services.message.MessageProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -16,11 +16,11 @@ import java.util.UUID;
 @Slf4j
 public class MessageServiceImpl implements MessageService {
 
-  private final KafkaProducerService kafkaProducerService;
+  private final MessageProducerService messageProducerService;
   private final JWTUtil jwtUtil;
 
-  public MessageServiceImpl(KafkaProducerService kafkaProducerService, JWTUtil jwtUtil) {
-    this.kafkaProducerService = kafkaProducerService;
+  public MessageServiceImpl(MessageProducerService messageProducerService, JWTUtil jwtUtil) {
+    this.messageProducerService = messageProducerService;
     this.jwtUtil = jwtUtil;
   }
 
@@ -34,7 +34,7 @@ public class MessageServiceImpl implements MessageService {
             .timestamp(
                 Instant.now().getEpochSecond())
             .build();
-    kafkaProducerService.send(message);
+    messageProducerService.send(message);
     return Mono.empty();
   }
 }

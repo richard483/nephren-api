@@ -1,15 +1,18 @@
 package com.example.metanephren.servicesImpl.kafka;
 
 import com.example.metanephren.models.Message;
-import com.example.metanephren.services.kafka.KafkaProducerService;
+import com.example.metanephren.services.message.MessageProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class KafkaProducerServiceImpl implements KafkaProducerService {
+@ConditionalOnProperty(value = "kafka.enabled",
+    havingValue = "true")
+public class KafkaProducerServiceImpl implements MessageProducerService {
   private final ReactiveKafkaProducerTemplate<String, Message> reactiveKafkaProducerTemplate;
 
   @Value("${spring.kafka.template.default-topic}") private String topic;
