@@ -9,11 +9,11 @@
         <version>3.0.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>meta-nephren</artifactId>
-    <version>3.1.3</version>
-    <name>meta-nephren</name>
-    <description>meta-nephren</description>
+    <groupId>com.nephren</groupId>
+    <artifactId>nephren-api</artifactId>
+    <version>4.0-1</version>
+    <name>nephren-api</name>
+    <description>nephren-api</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -90,7 +90,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.example.metanephren.MetaNephrenApplication</mainClass>
+                    <mainClass>com.nephren.nephrenapi.MetaNephrenApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
