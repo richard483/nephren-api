@@ -1,7 +1,6 @@
 services:
   mongodb1:
     image: mongo
-    restart: always
     container_name: mongodb1
     volumes:
       - mongodata1:/data/db
@@ -11,7 +10,6 @@ services:
 
   mongodb2:
     image: mongo
-    restart: always
     container_name: mongodb2
     volumes:
       - mongodata2:/data/db
@@ -21,7 +19,6 @@ services:
 
   mongodb3:
     image: mongo
-    restart: always
     container_name: mongodb3
     volumes:
       - mongodata3:/data/db
@@ -33,7 +30,6 @@ services:
     image: zookeeper
     ports:
       - 2181:2181
-      -
   kafka:
     image: wurstmeister/kafka
     depends_on:

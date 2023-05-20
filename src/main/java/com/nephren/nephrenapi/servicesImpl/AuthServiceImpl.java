@@ -1,12 +1,13 @@
 package com.nephren.nephrenapi.servicesImpl;
 
+import com.nephren.nephrenapi.helper.util.JWTUtil;
 import com.nephren.nephrenapi.models.Role;
 import com.nephren.nephrenapi.models.User;
 import com.nephren.nephrenapi.models.requests.AuthRequestVo;
 import com.nephren.nephrenapi.models.requests.RegisterRequestVo;
-import com.nephren.nephrenapi.models.responses.MetaNephrenBaseResponse;
+import com.nephren.nephrenapi.models.responses.LoginResponseVo;
+import com.nephren.nephrenapi.models.responses.RegisterResponseVo;
 import com.nephren.nephrenapi.repositories.UserRepository;
-import com.nephren.nephrenapi.helper.util.JWTUtil;
 import com.nephren.nephrenapi.securities.PBKDF2Encoder;
 import com.nephren.nephrenapi.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -33,14 +33,11 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public Mono<MetaNephrenBaseResponse<Object>> login(AuthRequestVo requestVo) {
+  public Mono<LoginResponseVo> login(AuthRequestVo requestVo) {
     return userRepository.findUserByUsername(requestVo.getUsername())
         .filter(u -> pbkdf2Encoder.encode(requestVo.getPassword()).equals(u.getPassword()))
-        .map(u -> MetaNephrenBaseResponse.builder()
-            .body(Map.of("token", jwtUtil.generateToken(u)))
-            .success(true)
-            .build())
-        .switchIfEmpty(Mono.just(MetaNephrenBaseResponse.builder()
+        .map(u -> LoginResponseVo.builder().token(jwtUtil.generateToken(u)).success(true).build())
+        .switchIfEmpty(Mono.just(LoginResponseVo.builder()
             .success(false)
             .errorCode(HttpStatus.BAD_REQUEST.toString())
             .errorMessage("Wrong email or password")
@@ -48,12 +45,11 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
-  public Mono<MetaNephrenBaseResponse<Object>> register(RegisterRequestVo requestVo) {
+  public Mono<RegisterResponseVo> register(RegisterRequestVo requestVo) {
     return userRepository.findUserByUsername(requestVo.getUsername())
-        .map(user -> MetaNephrenBaseResponse.builder()
+        .map(user -> RegisterResponseVo.builder()
             .errorMessage("The username " + user.getUsername() + " has used!")
-            .errorCode(HttpStatus.BAD_REQUEST.toString())
-            .success(false)
+            .errorCode(HttpStatus.IM_USED.toString())
             .build())
         .switchIfEmpty(userRepository.save(User.builder()
                 .username(requestVo.getUsername())
@@ -61,8 +57,9 @@ public class AuthServiceImpl implements AuthService {
                 .roles(List.of(Role.ROLE_MEMBER))
                 .enabled(true)
                 .build())
-            .map(user1 -> MetaNephrenBaseResponse.builder()
-                .body(Map.of("created", user1))
+            .map(user1 -> RegisterResponseVo.builder()
+                .username(user1.getUsername())
+                .role(user1.getRoles())
                 .success(true)
                 .build()));
   }
