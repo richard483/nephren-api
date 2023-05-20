@@ -57,10 +57,10 @@ class AuthControllerIntegrationTests {
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$['body'].['created'].['username']")
+        .jsonPath("$['body'].['username']")
         .isEqualTo(USER_NAME)
-        .jsonPath("$['body'].['created'].['password']")
-        .isEqualTo(pbkdf2Encoder.encode(USER_PASSWORD));
+        .jsonPath("$['body'].['role'].[0]")
+        .isEqualTo("ROLE_MEMBER");
   }
 
   @Test
@@ -84,12 +84,14 @@ class AuthControllerIntegrationTests {
         .expectStatus()
         .isOk()
         .expectBody()
-        .jsonPath("$['body']")
+        .jsonPath("$['body'].['username']")
+        .isEqualTo(null)
+        .jsonPath("$['body'].['role']")
         .isEqualTo(null)
         .jsonPath("$['errorMessage']")
         .isEqualTo("The username " + USER_NAME + " has used!")
         .jsonPath("$['errorCode']")
-        .isEqualTo("400 BAD_REQUEST")
+        .isEqualTo("226 IM_USED")
         .jsonPath("$['success']")
         .isEqualTo(false);
   }

@@ -21,7 +21,7 @@ public class MessageController {
   }
 
   @PutMapping("/put")
-  public Mono<Void> putKafka(@RequestBody MessageRequestVo messageRequest,
+  public Mono<Void> sendMessage(@RequestBody MessageRequestVo messageRequest,
       @RequestHeader("Authorization") String token) {
     return messageService.sendMessage(messageRequest, token);
   }
